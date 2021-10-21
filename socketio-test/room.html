@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>room</title>
+</head>
+<body>
+    <span>Welcome to Room by Hai Long</span><br>
+    <div id="broad-message">
+
+    </div>
+    <input id='message' type="text" name="message" placeholder="type a message...">
+    <button id="send-message">Send a message</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const broadMessage = document.querySelector('#broad-message');
+        const message = document.querySelector('#message');
+        const btnMessage = document.querySelector('#send-message');
+        let path = window.location.href;
+        console.log(path);
+        path = path.split('/');
+        const nameRoom = path[path.length-1];
+
+        btnMessage.addEventListener('click', (e) => {
+            socket.emit('join-room', nameRoom);
+            socket.on('join-room-suss', (data) => {
+                socket.emit('room-new-message', [message.value, nameRoom]);
+            });
+        })
+
+        socket.on('show-new-message', (data) => {
+            console.log(data);
+            var tag = document.createElement('h3');
+            tag.innerText = data;
+            broadMessage.appendChild(tag);
+            message.value = '';
+        })
+    </script>
+
+</body>
+</html>

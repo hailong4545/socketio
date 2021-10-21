@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <span id="show-name"></span><br>
+    <input type="text" name="nameRoom" placeholder="Name Room....">
+    <button>Submit</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const nameRoom = document.querySelector('input');
+        const btn = document.querySelector('button');
+
+        btn.addEventListener('click', (e) => {
+            socket.emit('creat-room', nameRoom.value);
+            socket.on('redirt', (data) => {
+                window.location = data;
+            })
+        })
+
+    </script>
+</body>
+</html>
